@@ -1,0 +1,126 @@
+<!-- Inject search results and clients when nothing is searched -->
+<!DOCTYPE html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>Noctora</title>
+	<link href="../static/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="../static/js/bootstrap.min.js"></script>
+	<script src="../static/js/jquery.min.js"></script>
+	<script src="../static/css/all.css"></script>
+	<script src="../static/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<style>
+	body {
+		background-image: url("../static/matterhorn.jpg");
+		background-repeat: no-repeat;
+		background-position: center;
+		background-attachment: fixed;
+		background-position: inherit;
+		background-size: cover;
+		/* padding: 50px; */
+		/* font-family: 'Monaco'; */
+	}
+
+	.footer {
+		position: fixed;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		height: 50px;
+		padding: 10px;
+		background-color: rgba(0, 0, 0, 0.534);
+		color: blue;
+		text-align: center;
+		font-family: 'Monaco';
+	}
+
+	.botto-text {
+		color: rgb(12, 209, 209);
+		font-size: 17px;
+		margin: auto;
+	}
+
+	.table {
+		width: 70% !important;
+		margin-right: 15% !important;
+		margin-left: 15% !important;
+		margin-top: 2% !important;
+		margin-bottom: 1% !important;
+		border-radius: 12px !important;
+	}
+</style>
+
+<body>
+	<!-- Add a nav bar -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand"
+			style="color:turquoise!important; font-size: 25px!important; font-family: 'Monaco'!important;"
+			href='/'>Noctora</a>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active" style="margin: 5px!important;">
+					<a class="nav-link">Welcome, Lakshmi Kant Gupta <span class="sr-only">(current)</span></a>
+				</li>
+
+				<li class="nav-item" style="margin: 5px!important;">
+					<button class="btn btn-primary navbar-btn" onclick="window.location.href=`/add`">Add Client</button>
+				</li>
+
+				<li class="nav-item" style="margin: 5px!important;">
+					<button class="btn btn-info navbar-btn" onclick="window.location.href='/revenue'">Show
+						Revenue</button>
+				</li>
+			</ul>
+			<form class="form-inline my-2 my-lg-0" method="POST" action="/search">
+				<input class="form-control mr-sm-2" name="search" id='search' type="text" placeholder="Search Client..."
+					aria-label="Search">
+				<input class="btn btn-outline-success my-2 my-sm-0" value="Search" type="submit">
+			</form>
+			<a class="nav-link" href="/logout" style="color:tomato!important;"> Logout</a>
+		</div>
+	</nav>
+	<!-- END NAVBAR -->
+
+	<!-- Add Clients Pane -->
+	{% if clients %}
+	<table class="table table-light table-striped">
+		<thead class="thead-dark">
+			<tr>
+				<th>File no.</th>
+				<th>PAN</th>
+				<th>Name</th>
+				<th>Remarks</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- {% for result in res %} -->
+			<tr style="text-align: center!important">
+				<th scope="row">1</td>
+				<td><a href="/profile/{{ result[2] }}">ABCDE1023F</a></td>
+				<td>Name</td>
+				<td>Some remarks</td>
+			</tr>
+			<!-- {% endfor %} -->
+		</tbody>
+	</table>
+	{% else %}
+	<h2 style="text-align: center!important; color: white!important; font-family: Monaco!important;"> No clients added!
+		</h1>
+		{% endif %}
+
+		<!-- End Clients Pane -->
+
+
+		<!-- Footer -->
+		<div class="footer">
+			<p class="botto-text"> © Noirdemort. A <strong>Stygian</strong> Product, under
+				<strong>Nocturnal</strong>
+				initiative.</p>
+		</div>
+		<!--  End Footer -->
+</body>
+
+</html>
