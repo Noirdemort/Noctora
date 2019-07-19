@@ -5,7 +5,7 @@ import os
 import re
 import pymongo
 import hashlib
-from flask_uploads import UploadSet, IMAGES, configure_uploads
+# from flask_uploads import UploadSet, IMAGES, configure_uploads
 
 
 app = Flask(__name__)
@@ -20,14 +20,6 @@ mydb = myclient["Noctora"]
 clients = mydb['clients']
 transactions = mydb['transactions']
 tid = mydb['tid']
-
-
-@app.before_request
-def before_request():
-    if request.url.startswith('http://'):
-        url = request.url.replace('http://', 'https://', 1)
-        code = 301
-        return redirect(url, code=code)
 
 
 def gen_hash(string, salt):
@@ -45,12 +37,25 @@ def checkFields(form, conditions):
     return True
 
 
+client_list = []
+
+
+# @app.before_request
+# def before_request():
+#     if request.url.startswith('http://'):
+#         url = request.url.replace('http://', 'https://', 1)
+#         code = 301
+#         return redirect(url, code=code)
+
+
 @app.route('/', methods=["GET", "POST"])
 @cache.cached()
 def login():
     if request.method == "GET":
         if 'username' in session:
-			return render_template('index.html')
+			if not client_list:
+				client_list = list(clients.find().limit(10))
+			return render_template('index.html', clients=client_list)
 		return render_template('login.html')
     else:
         data = dict(request.form)
@@ -79,16 +84,18 @@ def search_client():
         ]
     }
 
-    results = list(clients.find(search_request))
-	return render_template('search.html', clients=results)
+	global client_list
+    client_list = list(clients.find(search_request))
+	return redirect('/')
 
 
 @app.route('/add', methods=['GET', 'POST'])
+@cache.cached()
 def add_client():
 	if 'username' not in session:
 		return redirect('/', code=403)
 	if request.method == 'GET':
-		return render_template('client.html')
+		return render_template('client.html', title="Add Client", path="/add", method="POST", file="", pan="", name="", remarks="", value="Add Client")
 	else:
 		data = dict(request.form)
 		if not checkFields(credentials, ['file', 'name', 'pan']):
@@ -128,7 +135,9 @@ def edit_client(client_id):
 	
 	if request.method == 'GET':
 		client = clients.find_one({"pan": client_id})
-		return render_template('client.html', client=client)
+		if client is None:
+			return "<h1>No Such Client</h1>"
+		return render_template('client.html', title="Update Client Details", method="PATCH",  path="/edit", file=client['file'], name=client['name'], pan=client['pan'], remarks=client['remarks'], value="Update Details")
 	else:
         data = dict(request.form)
 		if not checkFields(credentials, ['file', 'name', 'pan']):
@@ -163,7 +172,6 @@ def edit_client(client_id):
         return redirect('/profile/{}'.format(client['pan']))
 		
 	
-	
 @app.route('/delete/<client_id>', methods=['DELETE'])
 def delete_client(client_id):
 	if 'username' not in session:
@@ -179,12 +187,12 @@ def show_profile(client_id):
 	client = clients.find_one({"pan": client_id})
 	if client:
 		records = list(transactions.find({"client_id": client_id}))
-		return render_template('profile.html', client=client, records=records)
+		return render_template('profile.html', client=client, transactions=records)
 	else:
 		return "No Such Profile"
 
 
-@app.route('/add_record', methods=['POST'])
+@app.route('/add_transaction', methods=['POST'])
 def add_transaction():
 	if 'username' not in session:
 		return redirect('/')

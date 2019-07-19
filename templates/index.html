@@ -13,7 +13,8 @@
 
 <style>
 	body {
-		background-image: url("../static/matterhorn.jpg");
+		background-image: url("../static/nightshade_snow_mountain.jpg");
+		/* background-image: url("../static/matterhorn.jpg"); */
 		background-repeat: no-repeat;
 		background-position: center;
 		background-attachment: fixed;
@@ -54,7 +55,8 @@
 
 <body>
 	<!-- Add a nav bar -->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark"
+		style="width: 90%!important; border-radius: 6px!important; margin-left: 5%!important; margin-right: 5%!important;">
 		<a class="navbar-brand"
 			style="color:turquoise!important; font-size: 25px!important; font-family: 'Monaco'!important;"
 			href='/'>Noctora</a>
@@ -96,31 +98,31 @@
 			</tr>
 		</thead>
 		<tbody>
-			<!-- {% for result in res %} -->
+			{% for client in clients %}
 			<tr style="text-align: center!important">
-				<th scope="row">1</td>
-				<td><a href="/profile/{{ result[2] }}">ABCDE1023F</a></td>
-				<td>Name</td>
-				<td>Some remarks</td>
+				<th scope="row">{{ client['file'] }}</td>
+				<td><a href="/profile/{{ client['pan'] }}">{{ client['pan'] }}</a></td>
+				<td>{{ client['name'] }}</td>
+				<td>{{ client['remarks'] }}</td>
 			</tr>
-			<!-- {% endfor %} -->
+			{% endfor %}
 		</tbody>
 	</table>
 	{% else %}
 	<h2 style="text-align: center!important; color: white!important; font-family: Monaco!important;"> No clients added!
-		</h1>
-		{% endif %}
+	</h2>
+	{% endif %}
 
-		<!-- End Clients Pane -->
+	<!-- End Clients Pane -->
 
 
-		<!-- Footer -->
-		<div class="footer">
-			<p class="botto-text"> © Noirdemort. A <strong>Stygian</strong> Product, under
-				<strong>Nocturnal</strong>
-				initiative.</p>
-		</div>
-		<!--  End Footer -->
+	<!-- Footer -->
+	<div class="footer">
+		<p class="botto-text"> © Noirdemort. A <strong>Stygian</strong> Product, under
+			<strong>Nocturnal</strong>
+			initiative.</p>
+	</div>
+	<!--  End Footer -->
 </body>
 
 </html>
