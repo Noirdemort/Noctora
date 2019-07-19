@@ -110,7 +110,11 @@
 
 	<!--  Profile Description & Op -->
 	<div class="profile-container">
+		{% if 'image' in client %}
+		<img src="../images/{{ client['image']}}" alt="Client Image" class="float-left client-image" />
+		{% else %}
 		<img src="../static/mountain_fir.jpg" alt="Client Image" class="float-left client-image" />
+		{% endif %}
 		<br>
 		<div class="info">
 			<h1> {{ client['name'] }}</h1>
@@ -370,7 +374,7 @@
 	function checkConfirmation() {
 		var r = confirm('Are you sure you want to Permanently DELETE the Client?')
 		if (r == true) {
-			httpRequest('/delete', { id: document.getElementById('clientID').innerText }, 'delete')
+			httpRequest('/delete/{{ client["pan"]}}', {}, 'delete')
 		}
 	}
 

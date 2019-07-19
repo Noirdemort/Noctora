@@ -11,8 +11,8 @@ import hashlib
 app = Flask(__name__)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 app.config["IMAGE_UPLOADS"] = "./images/"
-app.config["ALLOWED_IMAGE_EXTENSIONS"] = ['png', 'jpg', 'jpeg']
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+app.config["ALLOWED_IMAGE_EXTENSIONS"] = ['.png', '.jpg', '.jpeg']
+ALLOWED_EXTENSIONS = set(['.png', '.jpg', '.jpeg'])
 
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
@@ -59,9 +59,10 @@ def login():
 		return render_template('login.html')
     else:
         data = dict(request.form)
-		if not checkFields(data, ['username', 'password'])
+		if not checkFields(data, ['username', 'password']):
+			return "Insufficient Data!"
         if data['username'] == 'lk@gmail.com' and data['password'] == 'hexMYlab':
-            session['username'] = "lk"
+            session['username'] = "lkgfbd"
             return render_template('index.html')
         else:
             return "<h1> Invalid Credentials !! </h1>"
@@ -71,6 +72,9 @@ def login():
 def search_client():
     if 'username' not in session:
         return redirect('/', code=403)
+	
+	if not checkFields(dict(request.form), ['search']):
+			return "Insufficient Data!"
 
 	keyword = dict(request.form)['search']
     keyword = keyword.lower()
@@ -114,11 +118,11 @@ def add_client():
 
 		if request.files:
 			image = request.files["image"]
-        	extension = os.path.splitext(file.filename)[1]
+        	extension = os.path.splitext(image.filename)[1]
         	
 			if image and extension in ALLOWED_EXTENSIONS:
-				f_name = secure_filename(str(client['pan']) + '.' + extension)
-        		file.save(os.path.join(app.config['IMAGE_UPLOADS'], f_name))
+				f_name = secure_filename(str(client['pan']) + extension)
+        		image.save(os.path.join(app.config['IMAGE_UPLOADS'], f_name))
 				client['image'] = f_name
 			else:
 				return '<h1> Invalid image format. Go back and try again </h1>'
@@ -158,11 +162,11 @@ def edit_client(client_id):
 		
 		if request.files:
 			image = request.files["image"]
-        	extension = os.path.splitext(file.filename)[1]
+        	extension = os.path.splitext(image.filename)[1]
         	
 			if image and extension in ALLOWED_EXTENSIONS:
-				f_name = secure_filename(str(client['pan']) + '.' + extension)
-        		file.save(os.path.join(app.config['IMAGE_UPLOADS'], f_name))
+				f_name = secure_filename(str(client['pan']) + extension)
+        		image.save(os.path.join(app.config['IMAGE_UPLOADS'], f_name))
 				client['image'] = f_name
 			else:
 				return '<h1> Invalid image format. Go back and try again </h1>'
@@ -180,7 +184,7 @@ def delete_client(client_id):
 	return redirect('/')
 
 
-@app.route('/profile/<client_id>', methods=['GET', 'POST'])
+@app.route('/profile/<client_id>', methods=['GET'])
 def show_profile(client_id):
 	if 'username' not in session:
 		return redirect('/')
@@ -233,6 +237,8 @@ def edit_transaction():
 def delete_transaction():
 	if 'username' not in session:
 		return redirect('/')
+	if not checkFields(dict(request.form), ['id']):
+			return "Insufficient Data!"
 	transaction_id = dict(request.form)['id']
 	transaction = transactions.find_one({"id": transaction_id})
 	if transaction:
@@ -248,7 +254,8 @@ def calculate_revenue():
 
 @app.route('/logout', methods=['GET'])
 def logout():
-	del session['username']
+	if 'username' in session:
+		del session['username']
 	return redirect('/')
 
 if __name__ == '__main__':
