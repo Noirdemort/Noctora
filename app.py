@@ -15,6 +15,7 @@ context.use_certificate_file('cert.pem')
 
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 app.config["IMAGE_UPLOADS"] = "./static/images/"
 app.config["ALLOWED_IMAGE_EXTENSIONS"] = ['.png', '.jpg', '.jpeg']
@@ -279,6 +280,6 @@ def logout():
 
 
 if __name__ == '__main__':
-    app.secret_key = os.urandom(24)
-    app.run(host='0.0.0.0', port=5000,
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port,
             ssl_context=('cert.pem', 'key.pem'))
