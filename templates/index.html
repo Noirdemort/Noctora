@@ -102,9 +102,9 @@
 			{% for client in clients %}
 			<tr style="text-align: center!important">
 				<th scope="row">{{ client['file'] }}</td>
-				<td><a href="/profile/{{ client['pan'] }}">{{ client['pan'] }}</a></td>
-				<td>{{ client['name'] }}</td>
-				<td>{{ client['remarks'] }}</td>
+				<td><a href="/profile/{{ client['pan'] }}">{{ client['pan'].upper() }}</a></td>
+				<td>{{ client['name'].title() }}</td>
+				<td>{{ client['remarks'].title() }}</td>
 			</tr>
 			{% endfor %}
 		</tbody>
