@@ -22,7 +22,7 @@ ALLOWED_EXTENSIONS = set(['.png', '.jpg', '.jpeg'])
 
 mongo_url = "mongodb+srv://darkOwl:wXsAw8goWFZn6w8G@noctora-xvqmy.mongodb.net/test?retryWrites=true&w=majority"
 
-myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+myclient = pymongo.MongoClient(mongo_url)
 db = myclient["Noctora"]
 clients = db['clients']
 transactions = db['transactions']
@@ -387,7 +387,7 @@ def delete_subrecord():
 
 @app.route('/revenue', methods=['GET'])
 def revenue():
-    return "Not Implemented Yet! Coming Soon..."
+    return "<h3>Not Implemented Yet! Coming Soon...</h3>"
 
 
 @app.route('/logout', methods=['GET'])
