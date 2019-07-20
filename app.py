@@ -185,8 +185,6 @@ def edit_client(client_id):
                 f_name = secure_filename(str(client['pan']) + extension)
                 image.save(os.path.join(app.config['IMAGE_UPLOADS'], f_name))
                 client['image'] = f_name
-            else:
-                return '<h1> Invalid image format. Go back and try again </h1>'
 
         clients.update_one({"pan": client_id}, {'$set': client})
 
