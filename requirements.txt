@@ -1,0 +1,6 @@
+Flask
+flask_caching
+pymongo
+dnspython
+gunicorn
+pyopenssl
