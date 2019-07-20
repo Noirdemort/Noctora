@@ -142,6 +142,11 @@
 					</div>
 
 					<div class="form-group">
+						<input name="phone" type="number" class="form-control" id="mobile" placeholder="Mobile number"
+							value="{{ mobile }}" />
+					</div>
+
+					<div class="form-group">
 						<input name="remarks" type="text" class="form-control" id="remarks" placeholder="Remarks"
 							value="{{ remarks }}" />
 					</div>
@@ -166,5 +171,11 @@
 		</p>
 	</div>
 </body>
+<script>
+	var x = document.getElementById('Login').getAttribute('action')
+	if (x != '/add') {
+		document.getElementById('pan').setAttribute('readonly', '')
+	}
+</script>
 
 </html>

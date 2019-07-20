@@ -21,13 +21,15 @@ app.config["IMAGE_UPLOADS"] = "./static/images/"
 app.config["ALLOWED_IMAGE_EXTENSIONS"] = ['.png', '.jpg', '.jpeg']
 ALLOWED_EXTENSIONS = set(['.png', '.jpg', '.jpeg'])
 
+mongo_url = "mongodb+srv://darkOwl:wXsAw8goWFZn6w8G@noctora-xvqmy.mongodb.net/test?retryWrites=true&w=majority"
 
-myclient = pymongo.MongoClient(
-    "mongodb+srv://darkOwl:wXsAw8goWFZn6w8G@noctora-xvqmy.mongodb.net/test?retryWrites=true&w=majority")
+myclient = pymongo.MongoClient(mongo_url)
 mydb = myclient["Noctora"]
 clients = mydb['clients']
 transactions = mydb['transactions']
+fees = mydb['fees']
 tid = mydb['tid']
+fid = mydb['fid']
 
 
 def gen_hash(string, salt):
@@ -112,7 +114,7 @@ def add_client():
     if 'username' not in session:
         return redirect('/')
     if request.method == 'GET':
-        return render_template('client.html', title="Add Client", path="/add", file="", pan="", name="", remarks="", value="Add Client")
+        return render_template('client.html', title="Add Client", path="/add", file="", pan="", name="", remarks="", mobile="", value="Add Client")
     else:
         data = dict(request.form)
 
@@ -123,13 +125,17 @@ def add_client():
             data[field] = data[field].lower()
         if 'remarks' not in data:
             data['remarks'] = ""
+
+        if 'phone' not in data:
+            data['phone'] = ""
+
         pattern = re.compile("^[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}$")
 
         if not bool(pattern.match(data['pan'])):
             return 'Invalid PAN format!!'
 
         client = {'file': data['file'], 'name': data['name'],
-                  'pan': data['pan'], 'remarks': data['remarks']}
+                  'pan': data['pan'], 'remarks': data['remarks'], "phone": data['phone']}
 
         if request.files:
             image = request.files["image"]
@@ -154,7 +160,7 @@ def edit_client(client_id):
         client = clients.find_one({"pan": client_id})
         if client is None:
             return "<h1>No Such Client</h1>"
-        return render_template('client.html', title="Update Client Details", path="/edit/{}".format(client_id), file=client['file'], name=client['name'], pan=client['pan'], remarks=client['remarks'], value="Update Details")
+        return render_template('client.html', title="Update Client Details", path="/edit/{}".format(client_id), file=client['file'], name=client['name'], pan=client['pan'], remarks=client['remarks'], mobile=client['phone'], value="Update Details")
     else:
 
         data = dict(request.form)
@@ -167,13 +173,19 @@ def edit_client(client_id):
         if 'remarks' not in data:
             data['remarks'] = ''
 
+        if 'phone' not in data:
+            data['phone'] = ''
+        else:
+            if len(data['phone'].strip()) != 10:
+                return "Inavlid Phone Number. Please Check phone number again!"
+
         pattern = re.compile("^[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}$")
 
         if not bool(pattern.match(data['pan'])):
             return 'Invalid PAN format!!'
 
         client = {'file': data['file'], 'name': data['name'],
-                  'pan': data['pan'], 'remarks': data['remarks']}
+                  'pan': data['pan'], 'remarks': data['remarks'], 'phone': data['phone'].strip()}
 
         if request.files:
             image = request.files["image"]
@@ -193,8 +205,12 @@ def edit_client(client_id):
 def delete_client(client_id):
     if 'username' not in session:
         return redirect('/')
-    clients.delete_one({"pan": client_id})
-    return redirect('/')
+    client = clients.find_one({"pan": client_id})
+    if client:
+        clients.delete_one({"pan": client_id})
+        return redirect('/')
+    else:
+        return "<h1>No such Client </h1>"
 
 
 @app.route('/profile/<client_id>', methods=['GET'])
@@ -204,10 +220,11 @@ def show_profile(client_id):
     client = clients.find_one({"pan": client_id})
     if client:
         records = list(transactions.find({"client_id": client_id}))
-        for i in records:
+        fee_records = list(fees.find({"client_id": client_id}))
+        for i in fee_records:
             i['total_charges'] = float(i['total_charges'])
             i['fee_granted'] = float(i['fee_granted'])
-        return render_template('profile.html', client=client, transactions=records)
+        return render_template('profile.html', client=client, transactions=records, fees=fee_records)
     else:
         return "No Such Profile"
 
@@ -217,8 +234,8 @@ def add_transaction():
     if 'username' not in session:
         return redirect('/')
     data = dict(request.form)
-    required_fields = ['asmtyr', 'filing_date', 'return_income', 'tax',
-                       'total_charges', 'fee_granted', 'last_transaction_date', 'client_id']
+    required_fields = ['asmtyr', 'filing_date',
+                       'return_income', 'tax', 'client_id']
     if not checkFields(data, required_fields):
         return "<h1> Insufficient fields! </h1>"
     info = {}
@@ -240,8 +257,8 @@ def edit_transaction():
     if 'username' not in session:
         return redirect('/')
     data = dict(request.form)
-    required_fields = ['id', 'asmtyr', 'filing_date', 'return_income', 'tax',
-                       'total_charges', 'fee_granted', 'last_transaction_date', 'client_id']
+    required_fields = ['id', 'asmtyr', 'filing_date',
+                       'return_income', 'tax', 'client_id']
     if not checkFields(data, required_fields):
         return "<h1> Insufficient fields! </h1>"
     info = {}
@@ -249,6 +266,45 @@ def edit_transaction():
         info[field] = data[field]
     transactions.update_one({"id": data['id']}, {'$set': info})
     return redirect('/profile/{}'.format(data['client_id']))
+
+
+@app.route('/add_fee', methods=['POST'])
+def add_receipt():
+    if 'username' not in session:
+        return redirect('/')
+    data = dict(request.form)
+    required_fields = ['total_charges', 'fee_granted',
+                       'transaction_date', 'client_id']
+    if not checkFields(data, required_fields):
+        return '<h1> Insufficient Fields! </h1>'
+    info = {}
+    for field in required_fields:
+        info[field] = data[field]
+
+    t_id = salt()
+    get_tid = fid.find_one({"id": t_id})
+    while get_tid:
+        t_id = salt()
+        get_tid = fid.find_one({"id": t_id})
+    info['id'] = t_id
+    fid.insert_one({"id": t_id})
+    fees.insert_one(info)
+    return redirect('/profile/{}'.format(data['client_id']))
+
+
+@app.route('/delete_fee', methods=['POST'])
+def delete_receipt():
+    if 'username' not in session:
+        return redirect('/')
+    if not checkFields(dict(request.form), ['id']):
+        return "Insufficient Data!"
+    transaction_id = dict(request.form)['id']
+    transaction = fees.find_one({"id": transaction_id})
+    if transaction:
+        fees.delete_one({"id": transaction_id})
+        fid.delete_one({"id": transaction_id})
+        return redirect('/profile/{}'.format(transaction['client_id']))
+    return "No such transaction"
 
 
 @app.route('/delete_transaction', methods=['POST'])
@@ -261,6 +317,7 @@ def delete_transaction():
     transaction = transactions.find_one({"id": transaction_id})
     if transaction:
         transactions.delete_one({"id": transaction_id})
+        tid.delete({"id": transaction_id})
         return redirect('/profile/{}'.format(transaction['client_id']))
     return "No such transaction"
 
