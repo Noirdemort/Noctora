@@ -204,6 +204,9 @@ def show_profile(client_id):
     client = clients.find_one({"pan": client_id})
     if client:
         records = list(transactions.find({"client_id": client_id}))
+        for i in records:
+            i['total_charges'] = float(i['total_charges'])
+            i['fee_granted'] = float(i['fee_granted'])
         return render_template('profile.html', client=client, transactions=records)
     else:
         return "No Such Profile"
@@ -215,7 +218,7 @@ def add_transaction():
         return redirect('/')
     data = dict(request.form)
     required_fields = ['asmtyr', 'filing_date', 'return_income', 'tax',
-                       'total_charges', 'fee_granted', 'last_transaction_date', 'subject', 'client_id']
+                       'total_charges', 'fee_granted', 'last_transaction_date', 'client_id']
     if not checkFields(data, required_fields):
         return "<h1> Insufficient fields! </h1>"
     info = {}
@@ -238,7 +241,7 @@ def edit_transaction():
         return redirect('/')
     data = dict(request.form)
     required_fields = ['id', 'asmtyr', 'filing_date', 'return_income', 'tax',
-                       'total_charges', 'fee_granted', 'last_transaction_date', 'subject', 'client_id']
+                       'total_charges', 'fee_granted', 'last_transaction_date', 'client_id']
     if not checkFields(data, required_fields):
         return "<h1> Insufficient fields! </h1>"
     info = {}

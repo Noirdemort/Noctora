@@ -142,9 +142,9 @@
                 <th>Return Income</th>
                 <th>Tax</th>
                 <th>Total Fee</th>
-                <th>Fee Granted</th>
-                <th>Last Transaction Date</th>
-                <th>Subject</th>
+                <th>Fee Recieved</th>
+                <th>Fee Recieved Date</th>
+                <th>Fee due</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -158,7 +158,7 @@
                 <td>{{ transaction['total_charges'] }}</td>
                 <td>{{ transaction['fee_granted'] }}</td>
                 <td>{{ transaction['last_transaction_date'] }}</td>
-                <td>{{ transaction['subject'] }}</td>
+                <td>{{ transaction['total_charges'] - transaction['fee_granted'] }}</td>
                 <td><a href="#" onclick="edit('{{ transaction['id'] }}')">Edit</a> / <a href="#"
                         onclick="del('{{ transaction['id'] }}')">Delete</a>
                 </td>
@@ -209,17 +209,13 @@
                                 required></input>
                         </div>
                         <div class="form-group">
-                            <label for="fee-text" class="col-form-label">Fee Granted:</label>
+                            <label for="fee-text" class="col-form-label">Fee Recieved:</label>
                             <input type="number" name="fee_granted" class="form-control" id="fee-text" required></input>
                         </div>
                         <div class="form-group">
-                            <label for="last-text" class="col-form-label">Last Transaction Date:</label>
+                            <label for="last-text" class="col-form-label">Fee Recieved Date:</label>
                             <input type="date" name="last_transaction_date" class="form-control" id="last-text"
                                 required></input>
-                        </div>
-                        <div class="form-group">
-                            <label for="subject-text" class="col-form-label">Subject:</label>
-                            <input type="text" name="subject" class="form-control" id="subject-text" required></input>
                         </div>
                         <input type="text" name="client_id" id="addClient" value="{{ client['pan'] }}" required hidden>
                         <input class="btn btn-primary" value="Add Transaction" type="submit" />
@@ -278,17 +274,13 @@
                                 required></input>
                         </div>
                         <div class="form-group">
-                            <label for="fee_edit" class="col-form-label">Fee Granted:</label>
+                            <label for="fee_edit" class="col-form-label">Fee Recieved:</label>
                             <input type="number" name="fee_granted" class="form-control" id="fee_edit" required></input>
                         </div>
                         <div class="form-group">
-                            <label for="last_edit" class="col-form-label">Last Transaction Date:</label>
+                            <label for="last_edit" class="col-form-label"> Fee Recieved Date:</label>
                             <input type="date" name="last_transaction_date" class="form-control" id="last_edit"
                                 required></input>
-                        </div>
-                        <div class="form-group">
-                            <label for="subject_edit" class="col-form-label">Subject:</label>
-                            <input type="text" name="subject" class="form-control" id="subject_edit" required></input>
                         </div>
                         <input type="text" name="client_id" id="editClient" value="{{ client['pan'] }}" required hidden>
                         <input class="btn btn-primary" value="Update Transaction" type="submit" />
@@ -364,7 +356,6 @@
         document.getElementById("total_edit").setAttribute("value", x[4].innerText);
         document.getElementById("fee_edit").setAttribute("value", x[5].innerText);
         document.getElementById("last_edit").setAttribute("value", x[6].innerText);
-        document.getElementById("subject_edit").setAttribute("value", x[7].innerText);
         // document.getElementById("editClient").setAttribute("value", document.getElementById('clientID').innerText);
 
         document.getElementById('showEdit').click()
