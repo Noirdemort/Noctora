@@ -281,7 +281,7 @@ def add_receipt():
         return redirect('/')
     data = dict(request.form)
     required_fields = ['total_charges', 'fee_granted',
-                       'transaction_date', 'client_id']
+                       'transaction_date', 'client_id', 'asmtyr']
     if not checkFields(data, required_fields):
         return '<h1> Insufficient Fields! </h1>'
     info = {}
@@ -387,6 +387,15 @@ def delete_subrecord():
 
 @app.route('/revenue', methods=['GET'])
 def revenue():
+    results = fees.find()
+    total_revenue = 0
+    total_paid = 0
+    total_pending = 0
+    cluster = {}
+    for res in results:
+        if res['id'] not in cluster:
+            pass
+
     return "<h3>Not Implemented Yet! Coming Soon...</h3>"
 
 

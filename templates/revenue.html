@@ -2,25 +2,102 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>
-		Noctora
-	</title>
+	<title>Noctora</title>
 	<link href="../static/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 	<script src="../static/js/bootstrap.min.js"></script>
 	<script src="../static/js/jquery.min.js"></script>
 </head>
 
 <style>
-	body {
-		background-image: url("../static/nightshade_snow_mountain.jpg");
-		/* background-image: url("../static/matterhorn.jpg"); */
+	body#LoginForm {
+		background-image: url("../static/starlight.jpg");
 		background-repeat: no-repeat;
 		background-position: center;
 		background-attachment: fixed;
 		background-position: inherit;
 		background-size: cover;
-		/* padding: 50px; */
-		/* font-family: 'Monaco'; */
+		padding: 50px;
+		font-family: 'Monaco';
+	}
+
+	.form-heading {
+		color: #fff;
+		font-size: 40px;
+	}
+
+	.panel h1 {
+		color: #1391e6;
+		font-size: 30px;
+		margin: 0 0 8px 0;
+	}
+
+
+	.login-form .form-control {
+		background: #f7f7f7 none repeat scroll 0 0;
+		border: 2px solid #d4d4d4;
+		border-radius: 5px;
+		font-size: 17px;
+		height: 50px;
+		line-height: 50px;
+		padding: 20px;
+	}
+
+	.main-div {
+		background: #dbddddd0 none repeat scroll 0 0;
+		margin-top: 4%;
+		margin-left: 33%;
+		border-radius: 15px;
+		border: black;
+		align-content: center;
+		/* margin: 10px auto 20px; */
+		max-width: 38%;
+		padding: 50px 70px 70px 71px;
+	}
+
+	.botto-text {
+		color: teal;
+		font-size: 17px;
+		margin: auto;
+	}
+
+	.login-form .form-group {
+		margin-bottom: 10px;
+	}
+
+	.login-form {
+		text-align: center;
+		color: #f5f0f0e5;
+		border: black
+	}
+
+	.login-form .btn.btn-primary {
+		background: #0eb47de8 none repeat scroll 0 0;
+		border-color: #11aa91;
+		border-radius: 6px;
+		color: #ffffff;
+		font-size: 20px;
+		width: 60%;
+		height: 40px;
+		line-height: 30px;
+		padding: 0;
+	}
+
+
+	.login-form .btn.btn-primary.reset {
+		background: #494eff none repeat scroll 0 0;
+	}
+
+	.back {
+		text-align: center;
+		margin-top: 5px;
+		color: teal;
+		padding: 5px;
+	}
+
+	.back a {
+		color: rgb(0, 89, 255);
+		font-size: 17px;
+		text-decoration: none;
 	}
 
 	.footer {
@@ -35,33 +112,17 @@
 		text-align: center;
 		font-family: 'Monaco';
 	}
-
-	.botto-text {
-		color: rgb(12, 209, 209);
-		font-size: 17px;
-		margin: auto;
-	}
-
-	.table {
-		width: 70% !important;
-		margin-right: 15% !important;
-		margin-left: 15% !important;
-		margin-top: 2% !important;
-		margin-bottom: 1% !important;
-		border-radius: 12px !important;
-	}
 </style>
 
-<body>
-
-
-
-	<!-- Footer -->
-	<div class="footer">
-		<p class="botto-text"> © Noirdemort. A <strong>Stygian</strong> Product.
-		</p>
+<body id="LoginForm">
+	<div class="container">
+		<h1 class="form-heading">Noctora</h1>
+		
 	</div>
-	<!-- End Footer -->
+
+	<div class="footer">
+		<p class="botto-text"> © Noirdemort. A <strong>Stygian</strong> Product.</p>
+	</div>
 </body>
 
 </html>
