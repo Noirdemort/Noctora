@@ -374,8 +374,12 @@
                                     {% for rec in subrecs[receipt['id']] %}
 									<tr>
 										<td> {{ rec['fee_granted'] }}</td>
-										<td>{{ rec['transaction_date'] }}</td>
-										<td>{{ receipt['total_charges'] - rec['fee_granted'] - total.sum }}</td>
+                                        <td>{{ rec['transaction_date'] }}</td>
+                                        {% if receipt['total_charges'] - rec['fee_granted'] - total.sum == 0 %}
+                                        <td style="color: cadetblue;">Bill Paid.</td>
+                                        {% else %}
+                                        <td>{{ receipt['total_charges'] - rec['fee_granted'] - total.sum }}</td>
+                                        {% endif %}
                                         <td><a href="javascript:void(0)" data-dismiss="modal" onclick="delSubrec('{{ rec['id'] }}')">Delete</a> </td>
                                         {% set total.sum = total.sum + rec['fee_granted'] %}
                                     </tr>
