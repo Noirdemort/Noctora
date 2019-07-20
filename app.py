@@ -71,7 +71,6 @@ def login():
         data = dict(request.form)
         if not checkFields(data, ['username', 'password']):
             return "Insufficient Data!"
-        print(data['password'])
         if data['username'] == 'lkgfbd@gmail.com' and gen_hash(data['password'], '') == gen_hash('lakshmi9&', ''):
             session['username'] = "lkgfbd@gmail.com"
             if not client_list:
