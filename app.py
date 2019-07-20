@@ -15,7 +15,7 @@ context.use_certificate_file('cert.pem')
 
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
+app.secret_key = 'ABCDE10293JSS_DSJHSJHSJD_DHABCJHSB_SKJADNCKSANJK_ASSCNANWDJAK'
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 app.config["IMAGE_UPLOADS"] = "./static/images/"
 app.config["ALLOWED_IMAGE_EXTENSIONS"] = ['.png', '.jpg', '.jpeg']
@@ -110,7 +110,7 @@ def search_client():
 @app.route('/add', methods=['GET', 'POST'])
 def add_client():
     if 'username' not in session:
-        return redirect('/', code=403)
+        return redirect('/')
     if request.method == 'GET':
         return render_template('client.html', title="Add Client", path="/add", file="", pan="", name="", remarks="", value="Add Client")
     else:
