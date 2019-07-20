@@ -10,13 +10,12 @@
 
 <style>
 	body#LoginForm {
-		background-image: url("../static/starlight.jpg");
+		background-image: url("../static/daybreak_mountain.jpg");
 		background-repeat: no-repeat;
 		background-position: center;
 		background-attachment: fixed;
-		background-position: inherit;
+		/* background-position: inherit; */
 		background-size: cover;
-		padding: 50px;
 		font-family: 'Monaco';
 	}
 
@@ -25,79 +24,11 @@
 		font-size: 40px;
 	}
 
-	.panel h1 {
-		color: #1391e6;
-		font-size: 30px;
-		margin: 0 0 8px 0;
-	}
-
-
-	.login-form .form-control {
-		background: #f7f7f7 none repeat scroll 0 0;
-		border: 2px solid #d4d4d4;
-		border-radius: 5px;
-		font-size: 17px;
-		height: 50px;
-		line-height: 50px;
-		padding: 20px;
-	}
-
-	.main-div {
-		background: #dbddddd0 none repeat scroll 0 0;
-		margin-top: 4%;
-		margin-left: 33%;
-		border-radius: 15px;
-		border: black;
-		align-content: center;
-		/* margin: 10px auto 20px; */
-		max-width: 38%;
-		padding: 50px 70px 70px 71px;
-	}
 
 	.botto-text {
 		color: teal;
 		font-size: 17px;
 		margin: auto;
-	}
-
-	.login-form .form-group {
-		margin-bottom: 10px;
-	}
-
-	.login-form {
-		text-align: center;
-		color: #f5f0f0e5;
-		border: black
-	}
-
-	.login-form .btn.btn-primary {
-		background: #0eb47de8 none repeat scroll 0 0;
-		border-color: #11aa91;
-		border-radius: 6px;
-		color: #ffffff;
-		font-size: 20px;
-		width: 60%;
-		height: 40px;
-		line-height: 30px;
-		padding: 0;
-	}
-
-
-	.login-form .btn.btn-primary.reset {
-		background: #494eff none repeat scroll 0 0;
-	}
-
-	.back {
-		text-align: center;
-		margin-top: 5px;
-		color: teal;
-		padding: 5px;
-	}
-
-	.back a {
-		color: rgb(0, 89, 255);
-		font-size: 17px;
-		text-decoration: none;
 	}
 
 	.footer {
@@ -112,14 +43,83 @@
 		text-align: center;
 		font-family: 'Monaco';
 	}
+
+	.profile-container {
+        background-color: rgba(212, 208, 216, 0.301);
+        width: 35%;
+        height: 200px;
+        margin: 5%;
+        margin-top: 2%;
+        clear: both;
+        border-radius: 10px;
+    }
+
+    .profile-container .info {
+        color: aliceblue;
+        font-family: Monaco;
+        margin-left: 20px;
+        margin-bottom: 10px;
+    }
+
+	.table {
+		width: 70% !important;
+		margin-right: 15% !important;
+		margin-left: 15% !important;
+		margin-top: 2% !important;
+		margin-bottom: 1% !important;
+		border-radius: 12px !important;
+	}
 </style>
 
 <body id="LoginForm">
 	<div class="container">
 		<h1 class="form-heading">Noctora</h1>
-		
 	</div>
+	<div class="profile-container">
+		<h1 class="form-heading" style="margin: 20px;">Financial Summary</h1>
+		
+		<div class="info">
+			<h2>Total revenue: {{ revenue }}</h2>
+			<h2>Total Paid: {{ paid }}</h2>
+			<h2>Total Pending: {{ pending }}</h2>
+		</div>
+	</div>
+	
+	<h2 class="form-heading" style="text-align: center;">Top Payees</h2>
+	<table class="table table-light table-striped">
+		<thead class="thead-dark" style="text-align: center;">
+			<th>Client Name</th>
+			<th>Total Revenue</th>
+			<th>Fee Pending</th>
+		</thead>
+		<tbody>
+			{% for rec in profiteers %}
+			<tr style="text-align: center;">
+				<td><a href="/profile/{{ rec['pan'] }}">{{ rec['name'] }}</a></td>
+				<td>{{ rec['revenue'] }}</td>
+				<td>{{ rec['remains'] }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 
+	<h2 class="form-heading" style="text-align: center;">Top Losses</h2>
+	<table class="table table-light table-striped">
+		<thead class="thead-dark" style="text-align: center;">
+			<th>Client</th>
+			<th>Phone Number</th>
+			<th>Total Pending</th>
+		</thead>
+		{% for rec in wreckers %}
+		<tr style="text-align: center;">
+			<td><a href="/profile/{{ rec['pan'] }}">{{ rec['name'] }}</a></td>
+			<td>{{ rec['phone'] }}</td>
+			<td>{{ rec['remains'] }} </td>
+		</tr>
+		{% endfor %}
+	</table> 
+	<br><br>
+									 
 	<div class="footer">
 		<p class="botto-text"> © Noirdemort. A <strong>Stygian</strong> Product.</p>
 	</div>

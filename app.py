@@ -387,16 +387,50 @@ def delete_subrecord():
 
 @app.route('/revenue', methods=['GET'])
 def revenue():
+    if 'username' not in session:
+        return redirect('/')
     results = fees.find()
     total_revenue = 0
     total_paid = 0
     total_pending = 0
     cluster = {}
     for res in results:
-        if res['id'] not in cluster:
-            pass
+        if res['client_id'] not in cluster:
+            cluster[res['client_id']] = {'revenue': 0, 'paid': 0, 'pending': 0}
+        cluster[res['client_id']]['revenue'] += float(res['total_charges'])
+        total_revenue += float(res['total_charges'])
+        srecs = subrecs.find({"fid": res['id']})
+        s = 0
+        for recs in srecs:
+            s += float(recs['fee_granted'])
+        total_paid += s
+        cluster[res['client_id']]['paid'] += s
+        cluster[res['client_id']]['pending'] += float(res['total_charges']) - s
 
-    return "<h3>Not Implemented Yet! Coming Soon...</h3>"
+    total_pending = total_revenue - total_paid
+    top_dollar = {}
+    top_loser = {}
+    for k in cluster:
+        top_dollar[k] = cluster[k]['revenue']
+        top_loser[k] = cluster[k]['pending']
+    
+    profiteer = sorted(top_dollar, key=top_dollar.get, reverse=True)[:10]
+    wrecker = sorted(top_loser, key=top_loser.get, reverse=True)
+
+    profit_records = []
+    for j in profiteer:
+        client = clients.find_one({"pan": j})
+        k = {"revenue": top_dollar[j], "pan": j, "name": client['name'], "remains": cluster[j]['pending']}
+        print(k)
+        profit_records.append(k)
+
+    wreckage_records = []
+    for j in wrecker:
+        client = clients.find_one({"pan": j})
+        k = {"remains": top_loser[j], "pan": j, "name": client['name'], "phone": client['phone']}
+        wreckage_records.append(k)
+
+    return render_template("revenue.html", revenue=total_revenue, pending=total_pending, paid=total_paid, profiteers=profit_records, wreckers=wreckage_records)
 
 
 @app.route('/logout', methods=['GET'])
