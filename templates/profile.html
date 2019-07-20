@@ -103,7 +103,7 @@
 			<h3 id="clientID">{{ client['pan'].upper() }} </h3>
 			<h4>Contact no.: {{ client['phone'] }} </h4>
 			<h5>Remarks: {{ client['remarks'] }} </h5> </div>
-		<button style="width: 15%;" class="btn btn-warning" onclick="window.location.href='/edit/{{ client[" pan "] }}'"> Edit Profile </button>
+		<button style="width: 15%;" class="btn btn-warning" onclick="window.location.href='/edit/{{ client['pan'] }}'"> Edit Profile </button>
 		<button style="width: 15%; margin-left: 5px;" class="btn btn-danger" onclick="checkConfirmation()">Delete Client </button>
 		<button style="width: 13%; margin-top: 20px; margin-left: 36%;" class="btn btn-info col s6" data-toggle="modal" id="showFeeButton" data-target="#showFee">Show Fee History</button>
 		<button style="width: 7%; margin-top: -38px; margin-left: 76%;" class="btn btn-primary col s8" data-toggle="modal" id="addFeeButton" data-target="#addFee">Add Fee</button>
