@@ -113,7 +113,7 @@
     <!-- Show Transaction Table + Add Transaction -->
     {% if transactions %}
 	<table class="table table-light table-striped">
-		<thead class="thead-dark">
+		<thead class="thead-dark" style="text-align: center;">
 			<tr>
 				<th>Assessment Year</th>
 				<th>Filing Date</th>
@@ -342,8 +342,8 @@
 				<div class="modal-body"> 
                     {% if fees %}
                         {% for receipt in fees %}
-                        <table class="table table-dark table-striped">
-                            <thead class="thead-dark">
+                        <table class="table table-dark table-striped" >
+                            <thead class="thead-dark" style="text-align: center;">
                                     <tr>
                                         <th>Assessment year</th>
                                         <th>Total Fee</th>
@@ -367,8 +367,8 @@
                             </tr> 
                             {% if subrecs[receipt['id']] %}
                                 
-							<table id="net" class="table table-striped">
-								<thead>
+							<table id="net" class="table table-striped" >
+								<thead style="text-align: center;">
 									<th>Fee Received</th>
 									<th>Fee Received Date</th>
 									<th>Fee Due</th>
@@ -378,7 +378,7 @@
                                     {% set total = namespace(sum=0) %}
 
                                     {% for rec in subrecs[receipt['id']] %}
-									<tr>
+									<tr style="text-align: center;">
 										<td> {{ rec['fee_granted'] }}</td>
                                         <td>{{ rec['transaction_date'] }}</td>
                                         {% if receipt['total_charges'] - rec['fee_granted'] - total.sum == 0 %}
