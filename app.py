@@ -13,7 +13,6 @@ context.use_privatekey_file('key.pem')
 context.use_certificate_file('cert.pem')
 # from flask_uploads import UploadSet, IMAGES, configure_uploads
 
-
 app = Flask(__name__)
 app.secret_key = 'ABCDE10293JSS_DSJHSJHSJD_DHABCJHSB_SKJADNCKSANJK_ASSCNANWDJAK'
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
@@ -23,13 +22,15 @@ ALLOWED_EXTENSIONS = set(['.png', '.jpg', '.jpeg'])
 
 mongo_url = "mongodb+srv://darkOwl:wXsAw8goWFZn6w8G@noctora-xvqmy.mongodb.net/test?retryWrites=true&w=majority"
 
-myclient = pymongo.MongoClient(mongo_url)
-mydb = myclient["Noctora"]
-clients = mydb['clients']
-transactions = mydb['transactions']
-fees = mydb['fees']
-tid = mydb['tid']
-fid = mydb['fid']
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+db = myclient["Noctora"]
+clients = db['clients']
+transactions = db['transactions']
+fees = db['fees']
+subrecs = db['subrecs']
+tid = db['tid']
+fid = db['fid']
+sid = db['sid']
 
 
 def gen_hash(string, salt):
@@ -221,10 +222,16 @@ def show_profile(client_id):
     if client:
         records = list(transactions.find({"client_id": client_id}))
         fee_records = list(fees.find({"client_id": client_id}))
+        all_subrecs = {}
         for i in fee_records:
             i['total_charges'] = float(i['total_charges'])
             i['fee_granted'] = float(i['fee_granted'])
-        return render_template('profile.html', client=client, transactions=records, fees=fee_records)
+            sb = list(subrecs.find({'fid': i['id']}))
+            for j in sb:
+                j['fee_granted'] = float(j['fee_granted'])
+            all_subrecs[i['id']] = sb
+        
+        return render_template('profile.html', client=client, transactions=records, fees=fee_records, subrecs=all_subrecs)
     else:
         return "No Such Profile"
 
@@ -289,6 +296,17 @@ def add_receipt():
     info['id'] = t_id
     fid.insert_one({"id": t_id})
     fees.insert_one(info)
+
+    record = { 'fee_granted': data['fee_granted'], 'transaction_date': data['transaction_date'], 'client_id': data['client_id'], 'fid': info['id']}
+    
+    t_id = salt()
+    get_tid = sid.find_one({"id": t_id})
+    while get_tid:
+        t_id = salt()
+        get_tid = sid.find_one({"id": t_id})
+    record['id'] = t_id
+    sid.insert_one({"id": t_id})
+    subrecs.insert_one(record)
     return redirect('/profile/{}'.format(data['client_id']))
 
 
@@ -318,6 +336,51 @@ def delete_transaction():
     if transaction:
         transactions.delete_one({"id": transaction_id})
         tid.delete({"id": transaction_id})
+        recors = subrecs.find({"fid": transaction_id})
+        for rec in recors:
+            sid.delete_one({"id": rec['id']})
+        subrecs.delete_many({"fid": transaction_id})
+        return redirect('/profile/{}'.format(transaction['client_id']))
+    return "No such transaction"
+
+
+@app.route('/add_subrecord', methods=['POST'])
+def add_subrecord():
+    if 'username' not in session:
+        return redirect('/')
+
+    data = dict(request.form)
+    required_fields = ['fee_granted', 'transaction_date', 'client_id', 'fid']
+
+    if not checkFields(data, required_fields):
+        return "<h1> Insuffiecient Fields! </h1>"
+
+    info = {}
+    for field in required_fields:
+        info[field] = data[field]
+
+    t_id = salt()
+    get_tid = sid.find_one({"id": t_id})
+    while get_tid:
+        t_id = salt()
+        get_tid = sid.find_one({"id": t_id})
+    info['id'] = t_id
+    sid.insert_one({"id": t_id})
+    subrecs.insert_one(info)
+    return redirect('/profile/{}'.format(data['client_id']))
+
+
+@app.route('/delete_subrecord', methods=['POST'])
+def delete_subrecord():
+    if 'username' not in session:
+        return redirect('/')
+    if not checkFields(dict(request.form), ['id']):
+        return "Insufficient Data!"
+    transaction_id = dict(request.form)['id']
+    transaction = subrecs.find_one({"id": transaction_id})
+    if transaction:
+        subrecs.delete_one({"id": transaction_id})
+        sid.delete_one({"id": transaction_id})
         return redirect('/profile/{}'.format(transaction['client_id']))
     return "No such transaction"
 
@@ -336,5 +399,5 @@ def logout():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port,
+    app.run(debug=True,host='0.0.0.0', port=port,
             ssl_context=('cert.pem', 'key.pem'))

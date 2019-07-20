@@ -1,13 +1,13 @@
 <!DOCTYPE html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <title>Noctora</title>
-    <link href="../static/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="../static/js/bootstrap.min.js"></script>
-    <script src="../static/js/jquery.min.js"></script>
-    <script src="../static/css/all.css"></script>
-    <script src="../static/js/bootstrap.bundle.min.js"></script>
+	<meta charset="utf-8">
+	<title>Noctora</title>
+	<link href="../static/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="../static/js/bootstrap.min.js"></script>
+	<script src="../static/js/jquery.min.js"></script>
+	<script src="../static/css/all.css"></script>
+	<script src="../static/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <style>
@@ -33,18 +33,19 @@
     .profile-container {
         background-color: rgba(212, 208, 216, 0.301);
         width: 90%;
-        height: 270px;
+        height: 275px;
         margin: 5%;
+        margin-top: 2%;
         clear: both;
         border-radius: 10px;
     }
 
     .profile-container .client-image {
-        height: 200px !important;
-        width: 200px !important;
-        border-radius: 100px;
+        height: 240px !important;
+        width: 240px !important;
+        border-radius: 120px;
         margin: 20px;
-        margin-right: 50px;
+        margin-right: 70px;
         margin-left: 20px;
     }
 
@@ -76,368 +77,357 @@
 </style>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark"
-        style="width: 90%!important; border-radius: 6px!important; margin-left: 5%!important; margin-right: 5%!important;">
-        <a class="navbar-brand"
-            style="color:turquoise!important; font-size: 25px!important; font-family: 'Monaco'!important;"
-            href='/'>Noctora</a>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active" style="margin: 5px!important;">
-                    <a class="nav-link">Welcome, Lakshmi Kant Gupta <span class="sr-only">(current)</span></a>
-                </li>
-
-                <li class="nav-item" style="margin: 5px!important;">
-                    <button class="btn btn-primary navbar-btn" onclick="window.location.href=`/add`">Add Client</button>
-                </li>
-
-                <li class="nav-item" style="margin: 5px!important;">
-                    <button class="btn btn-info navbar-btn" onclick="window.location.href='/revenue'">Show
-                        Revenue</button>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0" method="POST" action="/search">
-                <input class="form-control mr-sm-2" name="search" id='search' type="text" placeholder="Search Client..."
-                    aria-label="Search">
-                <input class="btn btn-outline-success my-2 my-sm-0" value="Search" type="submit">
-            </form>
-            <a class="nav-link" href="/logout" style="color:tomato!important;"> Logout</a>
-        </div>
-    </nav>
-    <!-- End Navbar -->
-
-    <!--  Profile Description & Op -->
-    <div class="profile-container">
-        {% if 'image' in client %}
-        <img src="../static/images/{{client['image']}}" alt="Client Image" class="float-left client-image" /> {% else %}
-        <img src="../static/mountain_fir.jpg" alt="Client Image" class="float-left client-image" /> {% endif %}
-        <br>
-        <div class="info">
-            <h1> {{ client['name'] }}</h1>
-            <h4>File No.: {{ client['file'] }}</h4>
-            <h3 id="clientID">{{ client['pan']}} </h3>
-            <h4>Contact no.: {{ client['phone'] }} </h4>
-            <h5>Remarks: {{ client['remarks'] }} </h5>
-        </div>
-        <button style="width: 15%;" class="btn btn-warning" onclick="window.location.href='/edit/{{ client["pan"] }}'">
-            Edit Profile
-        </button>
-        <button style="width: 15%; margin-left: 5px;" class="btn btn-danger" onclick="checkConfirmation()">Delete Client
-        </button>
-
-        <button style="width: 13%; margin-top: 20px; margin-left: 61%;" class="btn btn-info col s6" data-toggle="modal"
-            id="showFeeButton" data-target="#showFee">Show
-            Fee History</button>
-
-        <button style="width: 7%; margin-top: -38px; margin-left: 76%;" class="btn btn-primary col s8"
-            data-toggle="modal" id="addFeeButton" data-target="#addFee">Add
-            Fee</button>
-
-        <button style="width: 15%; margin-top: -38px; margin-left: 84%;" class="btn btn-success col s9"
-            data-toggle="modal" id="show" data-target="#addTransaction">Add
-            Tax Record</button>
-    </div>
-    <!-- End Profile Description & Op -->
-
+	<!-- Navbar -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="width: 90%!important; border-radius: 6px!important; margin-left: 5%!important; margin-right: 5%!important;"> <a class="navbar-brand" style="color:turquoise!important; font-size: 25px!important; font-family: 'Monaco'!important;" href='/'>Noctora</a>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active" style="margin: 5px!important;"> <a class="nav-link">Welcome, Lakshmi Kant Gupta <span class="sr-only">(current)</span></a> </li>
+				<li class="nav-item" style="margin: 5px!important;">
+					<button class="btn btn-primary navbar-btn" onclick="window.location.href=`/add`">Add Client</button>
+				</li>
+				<li class="nav-item" style="margin: 5px!important;">
+					<button class="btn btn-info navbar-btn" onclick="window.location.href='/revenue'">Show Revenue</button>
+				</li>
+			</ul>
+			<form class="form-inline my-2 my-lg-0" method="POST" action="/search">
+				<input class="form-control mr-sm-2" name="search" id='search' type="text" placeholder="Search Client..." aria-label="Search">
+				<input class="btn btn-outline-success my-2 my-sm-0" value="Search" type="submit"> </form> <a class="nav-link" href="/logout" style="color:tomato!important;"> Logout</a> </div>
+	</nav>
+	<!-- End Navbar -->
+	<!--  Profile Description & Op -->
+	<div class="profile-container"> {% if 'image' in client %} <img src="../static/images/{{client['image']}}" alt="Client Image" class="float-left client-image" /> {% else %} <img src="../static/mountain_fir.jpg" alt="Client Image" class="float-left client-image" /> {% endif %}
+		<br>
+		<div class="info">
+			<h1> {{ client['name'].title() }}</h1>
+			<h4>File No.: {{ client['file'] }}</h4>
+			<h3 id="clientID">{{ client['pan'].upper() }} </h3>
+			<h4>Contact no.: {{ client['phone'] }} </h4>
+			<h5>Remarks: {{ client['remarks'] }} </h5> </div>
+		<button style="width: 15%;" class="btn btn-warning" onclick="window.location.href='/edit/{{ client[" pan "] }}'"> Edit Profile </button>
+		<button style="width: 15%; margin-left: 5px;" class="btn btn-danger" onclick="checkConfirmation()">Delete Client </button>
+		<button style="width: 13%; margin-top: 20px; margin-left: 36%;" class="btn btn-info col s6" data-toggle="modal" id="showFeeButton" data-target="#showFee">Show Fee History</button>
+		<button style="width: 7%; margin-top: -38px; margin-left: 76%;" class="btn btn-primary col s8" data-toggle="modal" id="addFeeButton" data-target="#addFee">Add Fee</button>
+		<button style="width: 15%; margin-top: -38px; margin-left: 84%;" class="btn btn-success col s9" data-toggle="modal" id="show" data-target="#addTransaction">Add Tax Record</button>
+	</div>
+	<!-- End Profile Description & Op -->
     <!-- Show Transaction Table + Add Transaction -->
     {% if transactions %}
-    <table class="table table-light table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th>Assessment Year</th>
-                <th>Filing Date</th>
-                <th>Return Income</th>
-                <th>Tax</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for transaction in transactions %}
-            <tr id="{{ transaction['id'] }}" style="text-align: center!important">
-                <td>{{ transaction['asmtyr'] }}</td>
-                <td>{{ transaction['filing_date'] }}</td>
-                <td>{{ transaction['return_income'] }}</td>
-                <td>{{ transaction['tax'] }}</td>
-                <td><a href="#" onclick="edit('{{ transaction['id'] }}')">Edit</a> / <a href="#"
-                        onclick="del('{{ transaction['id'] }}')">Delete</a>
-                </td>
-            </tr>
+	<table class="table table-light table-striped">
+		<thead class="thead-dark">
+			<tr>
+				<th>Assessment Year</th>
+				<th>Filing Date</th>
+				<th>Return Income</th>
+				<th>Tax</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+             {% for transaction in transactions %}
+			<tr id="{{ transaction['id'] }}" style="text-align: center!important">
+				<td>{{ transaction['asmtyr'] }}</td>
+				<td>{{ transaction['filing_date'] }}</td>
+				<td>{{ transaction['return_income'] }}</td>
+				<td>{{ transaction['tax'] }}</td>
+				<td><a href="javascript:void(0)" onclick="edit('{{ transaction['id'] }}')">Edit</a> / <a href="javascript:void(0)" onclick="del('{{ transaction['id'] }}')">Delete</a> </td>
+            </tr> 
             {% endfor %}
         </tbody>
-    </table>
+    </table> 
     {% else %}
-    <h2 style="text-align: center!important; color: white!important; font-family: Monaco!important;"> No Transactions
-        added! </h2>
+        <h2 style="text-align: center!important; color: white!important; font-family: Monaco!important;"> No Transactions added! </h2> 
     {% endif %}
-    <!-- End Transaction Table -->
-
-    <!-- Add Tax Popup -->
-    <div class="modal fade" id="addTransaction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New Transaction</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" action="/add_transaction">
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Assessment Year:</label>
-                            <input type="number" min="1900" max="2099" step="1" value="2019" class="form-control"
-                                id="recipient-name" name="asmtyr" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="filing" class="col-form-label">Filing Date:</label>
-                            <input type="date" name="filing_date" class="form-control" id="filing" required></input>
-                        </div>
-                        <div class="form-group">
-                            <label for="return-text" class="col-form-label">Return Income:</label>
-                            <input type="number" name="return_income" class="form-control" id="return-text"
-                                required></input>
-                        </div>
-                        <div class="form-group">
-                            <label for="tax-text" class="col-form-label">Tax:</label>
-                            <input type="number" name="tax" class="form-control" id="tax-text" required></input>
-                        </div>
-                        <input type="text" name="client_id" id="addClient" value="{{ client['pan'] }}" required hidden>
-                        <input class="btn btn-primary" value="Add Transaction" type="submit" />
-
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Add Tax Popup -->
-
-    <button style="width: 15%; margin-top: 15px; margin-left: 84%;" class="btn btn-primary col s9" data-toggle="modal"
-        id="showEdit" data-target="#editTransaction" hidden>Edit
-        Transaction</button>
-
-    <!-- Edit Tax Popup -->
-    <div class="modal fade" id="editTransaction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Transaction</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" action="/edit_transaction">
-                        <div class="form-group">
-                            <input type="text" id="editTID" hidden readonly name="id">
-
-                            <label for="asmtyr_edit" class="col-form-label">Assessment Year:</label>
-                            <input type="number" min="1900" max="2099" step="1" value="2019" class="form-control"
-                                id="asmtyr_edit" name="asmtyr" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="filing_edit" class="col-form-label">Filing Date:</label>
-                            <input type="date" name="filing_date" class="form-control" id="filing_edit"
-                                required></input>
-                        </div>
-                        <div class="form-group">
-                            <label for="return_edit" class="col-form-label">Return Income:</label>
-                            <input type="number" name="return_income" class="form-control" id="return_edit"
-                                required></input>
-                        </div>
-                        <div class="form-group">
-                            <label for="tax_edit" class="col-form-label">Tax:</label>
-                            <input type="number" name="tax" class="form-control" id="tax_edit" required></input>
-                        </div>
-                        <input type="text" name="client_id" id="editClient" value="{{ client['pan'] }}" required hidden>
-                        <input class="btn btn-primary" value="Update Transaction" type="submit" />
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+	<!-- End Transaction Table -->
+	<!-- Add Tax Popup -->
+	<div class="modal fade" id="addTransaction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">New Transaction</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+				</div>
+				<div class="modal-body">
+					<form method="POST" action="/add_transaction">
+						<div class="form-group">
+							<label for="recipient-name" class="col-form-label">Assessment Year:</label>
+							<input type="number" min="1900" max="2099" step="1" value="2019" class="form-control" id="recipient-name" name="asmtyr" required> </div>
+						<div class="form-group">
+							<label for="filing" class="col-form-label">Filing Date:</label>
+							<input type="date" name="filing_date" class="form-control" id="filing" required></input>
+						</div>
+						<div class="form-group">
+							<label for="return-text" class="col-form-label">Return Income:</label>
+							<input type="number" name="return_income" class="form-control" id="return-text" required></input>
+						</div>
+						<div class="form-group">
+							<label for="tax-text" class="col-form-label">Tax:</label>
+							<input type="number" name="tax" class="form-control" id="tax-text" required></input>
+						</div>
+						<input type="text" name="client_id" id="addClient" value="{{ client['pan'] }}" required hidden>
+						<input class="btn btn-primary" value="Add Transaction" type="submit" /> </form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Add Tax Popup -->
+	<button style="width: 15%; margin-top: 15px; margin-left: 84%;" class="btn btn-primary col s9" data-toggle="modal" id="showEdit" data-target="#editTransaction" hidden>Edit Transaction</button>
+	<!-- Edit Tax Popup -->
+	<div class="modal fade" id="editTransaction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Edit Transaction</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+				</div>
+				<div class="modal-body">
+					<form method="POST" action="/edit_transaction">
+						<div class="form-group">
+							<input type="text" id="editTID" hidden readonly name="id">
+							<label for="asmtyr_edit" class="col-form-label">Assessment Year:</label>
+							<input type="number" min="1900" max="2099" step="1" value="2019" class="form-control" id="asmtyr_edit" name="asmtyr" required> </div>
+						<div class="form-group">
+							<label for="filing_edit" class="col-form-label">Filing Date:</label>
+							<input type="date" name="filing_date" class="form-control" id="filing_edit" required></input>
+						</div>
+						<div class="form-group">
+							<label for="return_edit" class="col-form-label">Return Income:</label>
+							<input type="number" name="return_income" class="form-control" id="return_edit" required></input>
+						</div>
+						<div class="form-group">
+							<label for="tax_edit" class="col-form-label">Tax:</label>
+							<input type="number" name="tax" class="form-control" id="tax_edit" required></input>
+						</div>
+						<input type="text" name="client_id" id="editClient" value="{{ client['pan'] }}" required hidden>
+						<input class="btn btn-primary" value="Update Transaction" type="submit" /> </form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
     <!-- End Tax Popup -->
-
-    <button style="width: 15%; margin-top: 15px; margin-left: 84%;" class="btn btn-danger col s9" data-toggle="modal"
-        id="showDelete" data-target="#deleteTransaction" hidden>Delete
-        Transaction</button>
-
-    <!-- Delete Transaction Popup -->
-    <div class="modal fade" id="deleteTransaction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete Transaction</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" action="/delete_transaction">
-                        <div class="form-group">
-                            <label for="del" class="col-form-label">Are you sure you want to DELETE this
-                                Transaction?</label> <br>
-                            <h5>Transation ID:- </h5>
-                            <input type="text" class="form-control" id="del" value="OK" name="id" readonly>
-                        </div>
-                        <input class="btn btn-danger" value="Delete Transaction" type="submit" />
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
+    
+	<button style="width: 15%; margin-top: 15px; margin-left: 84%;" class="btn btn-danger col s9" data-toggle="modal" id="showDelete" data-target="#deleteTransaction" hidden>Delete Transaction</button>
+	<!-- Delete Transaction Popup -->
+	<div class="modal fade" id="deleteTransaction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Delete Transaction</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+				</div>
+				<div class="modal-body">
+					<form method="POST" action="/delete_transaction">
+						<div class="form-group">
+							<label for="del" class="col-form-label">Are you sure you want to DELETE this Transaction?</label>
+							<br>
+							<h5>Transation ID:- </h5>
+							<input type="text" class="form-control" id="del" value="OK" name="id" readonly> </div>
+						<input class="btn btn-danger" value="Delete Transaction" type="submit" /> </form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
     </div>
-    <!-- End Delete Transaction Popup -->
-
-
-    <!-- Add Fee details Pop-up -->
-    <div class="modal fade" id="addFee" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New Receipt</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" action="/add_fee">
-                        <div class="form-group">
-                            <label for="total-text" class="col-form-label">Total Fee:</label>
-                            <input type="number" name="total_charges" class="form-control" id="total-text"
-                                required></input>
-                        </div>
-                        <div class="form-group">
-                            <label for="fee-text" class="col-form-label">Fee Recieved:</label>
-                            <input type="number" name="fee_granted" class="form-control" id="fee-text" required></input>
-                        </div>
-                        <div class="form-group">
-                            <label for="last-text" class="col-form-label">Fee Recieved Date:</label>
-                            <input type="date" name="transaction_date" class="form-control" id="last-text"
-                                required></input>
-                        </div>
-                        <input type="text" name="client_id" id="addClient" value="{{ client['pan'] }}" required hidden>
-                        <input class="btn btn-success" value="Add Receipt" type="submit" />
+    
+	<!-- End Delete Transaction Popup -->
+	<!-- Add Fee details Pop-up -->
+	<div class="modal fade" id="addFee" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">New Receipt</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+				</div>
+				<div class="modal-body">
+					<form method="POST" action="/add_fee">
+						<div class="form-group">
+							<label for="total-text" class="col-form-label">Total Fee:</label>
+							<input type="number" name="total_charges" class="form-control" id="total-text" required></input>
+						</div>
+						<div class="form-group">
+							<label for="fee-text" class="col-form-label">Fee Recieved:</label>
+							<input type="number" name="fee_granted" class="form-control" id="fee-text" required></input>
+						</div>
+						<div class="form-group">
+							<label for="last-text" class="col-form-label">Fee Recieved Date:</label>
+							<input type="date" name="transaction_date" class="form-control" id="last-text" required></input>
+						</div>
+						<input type="text" name="client_id" id="addClient" value="{{ client['pan'] }}" required hidden>
+						<input class="btn btn-success" value="Add Receipt" type="submit" /> </form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Fee details Pop-up -->
+	<button style="width: 15%; margin-top: 15px; margin-left: 84%;" class="btn btn-danger col s9" data-toggle="modal" id="subrecAdd" data-target="#addFeeSubrecord" hidden>Add subrecord Fee</button>
+	<!-- Add subrecord -->
+	<div class="modal fade" id="addFeeSubrecord" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">New Record</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+				</div>
+				<div class="modal-body">
+					<form method="POST" action="/add_subrecord">
+						<div class="form-group">
+							<label for="fee-text" class="col-form-label">Fee Recieved:</label>
+							<input type="number" name="fee_granted" class="form-control" id="fee-text" required></input>
+						</div>
+						<div class="form-group">
+							<label for="last-text" class="col-form-label">Fee Recieved Date:</label>
+							<input type="date" name="transaction_date" class="form-control" id="last-text" required></input>
+						</div>
+						<input type="text" name="client_id" id="addClient" value="{{ client['pan'] }}" required hidden>
+						<input type="text" name="fid" id="fid" value="" required readonly hidden>
+						<input class="btn btn-success" value="Add Receipt" type="submit" /> </form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Add subrecord -->
+	<!-- Delete Subrecord -->
+    <button class="btn btn-danger col s9" data-toggle="modal" id="showDeleteDialog" data-target="#deleteSubrecord" hidden>Delete Subrecord</button>
+    
+	<div class="modal fade" id="deleteSubrecord" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Delete Subrecord</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+				</div>
+				<div class="modal-body">
+					<form method="POST" action="/delete_subrecord">
+						<div class="form-group">
+							<label for="del" class="col-form-label">Are you sure you want to DELETE this Record?</label>
+							<br>
+							<h5>Record ID:- </h5>
+							<input type="text" class="form-control" id="delSubrecord" value="OK" name="id" readonly> </div>
+                        <input class="btn btn-danger" value="Delete Record" type="submit" />
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- End Fee details Pop-up -->
-
-
-
-    <!-- Show history Modal -->
-    <div class="modal fade" id="showFee" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Receipt History</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+    <!-- End delete subrecord -->
+    
+	<!-- Show history Modal -->
+	<div class="modal fade" id="showFee" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Receipt History</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+				</div>
+				<div class="modal-body"> 
                     {% if fees %}
-                    <table class="table table-dark table-striped">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>Total Fee</th>
-                                <th>Fee Recieved</th>
-                                <th>Fee Recieved Date</th>
-                                <th>Fee due</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for receipt in fees %}
-                            <tr id="{{ receipt['id'] }}" style="text-align: center!important">
-                                <td>{{ receipt['total_charges'] }}</td>
-                                <td>{{ receipt['fee_granted'] }}</td>
-                                <td>{{ receipt['transaction_date'] }}</td>
-                                <td>{{ receipt['total_charges'] - receipt['fee_granted'] }}</td>
-                                <td><a href="#" onclick="deleteFee('{{ receipt['id'] }}')">Delete</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    {% else %}
-                    <h2 style="text-align: center!important; color: black!important; font-family: Monaco!important;"> No
+                        {% for receipt in fees %}
+                        <table class="table table-dark table-striped">
+                            <thead class="thead-dark">
+                                    <tr>
+                                        <th>Total Fee</th>
+                                        <th>Fee Recieved</th>
+                                        <th>Fee Recieved Date</th>
+                                        <th>Fee due</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody> 
+							<tr id="{{ receipt['id'] }}" style="text-align: center!important">
+								<td>{{ receipt['total_charges'] }}</td>
+								<td>{{ receipt['fee_granted'] }}</td>
+								<td>{{ receipt['transaction_date'] }}</td>
+								<td>{{ receipt['total_charges'] - receipt['fee_granted'] }}</td>
+                                <td><a href="javascript:void(0)" data-dismiss="modal" onclick="addSubRecord('{{ receipt['id'] }}')"> Add Record</a> /
+                                   
+                                <a href="javascript:void(0)" data-dismiss="modal" onclick="deleteFeeProcess('{{ receipt['id'] }}')">Delete</a>
+                                 </td>
+                            </tr> 
+                            {% if subrecs[receipt['id']] %}
+                                
+							<table id="net" class="table table-striped">
+								<thead>
+									<th>Fee Received</th>
+									<th>Fee Received Date</th>
+									<th>Fee Due</th>
+									<th>Action</th>
+                                </thead>
+								<tbody>
+                                    {% set total = namespace(sum=0) %}
+
+                                    {% for rec in subrecs[receipt['id']] %}
+									<tr>
+										<td> {{ rec['fee_granted'] }}</td>
+										<td>{{ rec['transaction_date'] }}</td>
+										<td>{{ receipt['total_charges'] - rec['fee_granted'] - total.sum }}</td>
+                                        <td><a href="javascript:void(0)" data-dismiss="modal" onclick="delSubrec('{{ rec['id'] }}')">Delete</a> </td>
+                                        {% set total.sum = total.sum + rec['fee_granted'] %}
+                                    </tr>
+                                    {% endfor %}
+								</tbody>
+                            </table> 
+                             {% endif %} 
+                            </tbody>
+                        </table> 
+                        {% endfor %}
+
+                        {% else %}
+					<h2 style="text-align: center!important; color: black!important; font-family: Monaco!important;"> No
                         Receipts
-                        added! </h2>
-                    {% endif %}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- End Show history -->
-
-
-    <button style="width: 15%; margin-top: 15px; margin-left: 84%;" class="btn btn-danger col s9" data-toggle="modal"
-        id="showDeleteFee" data-target="#deleteFee" hidden>Delete
-        Fee</button>
-    <!-- Delete Fee Modal -->
-    <div class="modal fade" id="deleteFee" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete Fee Receipt</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" action="/delete_fee">
-                        <div class="form-group">
-                            <label for="del" class="col-form-label">Are you sure you want to DELETE this
-                                Fee receipt?</label> <br>
-                            <h5>Receipt ID:- </h5>
-                            <input type="text" class="form-control" id="delFee" value="OK" name="id" readonly>
-                        </div>
-                        <input class="btn btn-danger" value="Delete Transaction" type="submit" />
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- End Delete Fee Modal -->
-
-
-    <!-- Footer -->
-    <div class="footer">
-        <p class="botto-text"> © Noirdemort. A <strong>Stygian</strong> Product, under
-            <strong>Nocturnal</strong> initiative.
-        </p>
-    </div>
-    <!-- End Footer -->
+                        added! </h2> {% endif %} </div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Show history -->
+	<button style="width: 15%; margin-top: 15px; margin-left: 84%;" class="btn btn-danger col s9" data-toggle="modal" id="showDeleteFee" data-target="#deleteFee" hidden>Delete Fee</button>
+	<!-- Delete Fee Modal -->
+	<div class="modal fade" id="deleteFee" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Delete Fee Receipt</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+				</div>
+				<div class="modal-body">
+					<form method="POST" action="/delete_fee">
+						<div class="form-group">
+							<label for="del" class="col-form-label">Are you sure you want to DELETE this Fee receipt?</label>
+							<br>
+							<h5>Receipt ID:- </h5>
+							<input type="text" class="form-control" id="delFee" value="OK" name="id" readonly> </div>
+						<input class="btn btn-danger" value="Delete Transaction" type="submit" /> </form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Delete Fee Modal -->
+	<!-- Footer -->
+	<div class="footer">
+		<p class="botto-text"> © Noirdemort. A <strong>Stygian</strong> Product. </p>
+	</div>
+	<!-- End Footer -->
 </body>
 
 <script>
@@ -446,7 +436,6 @@
         document.getElementById('del').setAttribute("value", id)
         document.getElementById('showDelete').click()
     }
-
     // Add Logic for editing
     function edit(tid) {
         var x = document.getElementById(tid);
@@ -456,41 +445,45 @@
         document.getElementById("filing_edit").setAttribute("value", x[1].innerText);
         document.getElementById("return_edit").setAttribute("value", x[2].innerText);
         document.getElementById("tax_edit").setAttribute("value", x[3].innerText);
-        // document.getElementById("editClient").setAttribute("value", document.getElementById('clientID').innerText);
-
         document.getElementById('showEdit').click()
     }
 
     function checkConfirmation() {
         var r = confirm('Are you sure you want to Permanently DELETE the Client?')
-        if (r == true) {
+        if(r == true) {
             httpRequest('/delete/{{ client["pan"]}}', {})
         }
     }
 
-    function deleteFee(id) {
-        document.getElementById('delFee').setAttribute("value", id)
-        document.getElementById('showDeleteFee').click()
+    function deleteFeeProcess(id) {
+        document.getElementById('delFee').setAttribute("value", id);
+        document.getElementById('showDeleteFee').click();
+    }
+
+    function addSubRecord(id) {
+        document.getElementById('fid').setAttribute("value", id)
+        document.getElementById('subrecAdd').click()
+    }
+
+    function delSubrec(id) {
+        document.getElementById('delSubrecord').setAttribute("value", id)
+        document.getElementById('showDeleteDialog').click()
     }
 
     function httpRequest(path, params, method) {
-        method = method || "post"; // Set method to post by default if not specified.
-
-        var form = document.createElement("form");
+        method = method || "post"; // Set method to post by default if not specified.var
+        form = document.createElement("form");
         form.setAttribute("method", method);
         form.setAttribute("action", path);
-
-        for (var key in params) {
-            if (params.hasOwnProperty(key)) {
+        for(var key in params) {
+            if(params.hasOwnProperty(key)) {
                 var hiddenField = document.createElement("input");
                 hiddenField.setAttribute("type", "hidden");
                 hiddenField.setAttribute("name", key);
                 hiddenField.setAttribute("value", params[key]);
-
                 form.appendChild(hiddenField);
             }
         }
-
         document.body.appendChild(form);
         form.submit();
     }
