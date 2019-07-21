@@ -47,7 +47,7 @@
 	.profile-container {
         background-color: rgba(212, 208, 216, 0.301);
         width: 35%;
-        height: 200px;
+        height: 210px;
         margin: 5%;
         margin-top: 2%;
         clear: both;
@@ -62,13 +62,13 @@
     }
 
 	.table {
-		width: 70% !important;
-		margin-right: 15% !important;
-		margin-left: 15% !important;
+		width: 90% !important;
+		margin-right: 20px;
+		margin-left: 20px;
 		margin-top: 2% !important;
 		margin-bottom: 1% !important;
 		border-radius: 12px !important;
-	}
+	} 
 </style>
 
 <body id="LoginForm">
@@ -84,9 +84,11 @@
 			<h2>Total Pending: {{ pending }}</h2>
 		</div>
 	</div>
+	<div class="row">
 	
-	<h2 class="form-heading" style="text-align: center;">Top Payees</h2>
-	<table class="table table-light table-striped">
+	<div class="table-responsive col-md-6">
+			<h2 class="form-heading" style="text-align: center;">Top Payees</h2>
+	<table class="table table-light table-striped " >
 		<thead class="thead-dark" style="text-align: center;">
 			<th>Client Name</th>
 			<th>Total Revenue</th>
@@ -102,8 +104,10 @@
 			{% endfor %}
 		</tbody>
 	</table>
+	</div>
 
-	<h2 class="form-heading" style="text-align: center;">Top Losses</h2>
+	<div class="table-responsive col-md-6">
+<h2 class="form-heading" style="text-align: center;">Top Losses</h2>
 	<table class="table table-light table-striped">
 		<thead class="thead-dark" style="text-align: center;">
 			<th>Client</th>
@@ -118,6 +122,8 @@
 		</tr>
 		{% endfor %}
 	</table> 
+	</div>
+	</div>
 	<br><br>
 									 
 	<div class="footer">
