@@ -64,7 +64,7 @@ def login():
     global client_list
     if request.method == "GET":
         if not client_list:
-            clientele = list(clients.find().limit(10))
+            clientele = list(clients.find().sort("name", pymongo.ASCENDING))
         else:
             clientele = client_list
         if 'username' in session:
@@ -74,10 +74,10 @@ def login():
         data = dict(request.form)
         if not checkFields(data, ['username', 'password']):
             return "Insufficient Data!"
-        if data['username'] == 'lkgfbd@gmail.com' and gen_hash(data['password'], '') == gen_hash('lakshmi9&', ''):
+        if data['username'] == 'lkgfbd@gmail.com' and gen_hash(data['password'], '') == gen_hash('lakshmi4%', ''):
             session['username'] = "lkgfbd@gmail.com"
             if not client_list:
-                clientele = list(clients.find().limit(10))
+                clientele = list(clients.find().sort("name", pymongo.ASCENDING))
             else:
                 clientele = client_list
             return render_template('index.html', clients=clientele)
@@ -124,11 +124,17 @@ def add_client():
 
         for field in data:
             data[field] = data[field].lower()
+        
         if 'remarks' not in data:
             data['remarks'] = ""
 
         if 'phone' not in data:
             data['phone'] = ""
+        
+        client = clients.find_one({"pan": data['pan']})
+        print(client)
+        if client:
+            return "<h1>Pan Card Already in use!</h1>" 
 
         pattern = re.compile("^[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}$")
 
@@ -208,6 +214,8 @@ def delete_client(client_id):
         return redirect('/')
     client = clients.find_one({"pan": client_id})
     if client:
+        global client_list
+        client_list = []
         clients.delete_one({"pan": client_id})
         return redirect('/')
     else:
