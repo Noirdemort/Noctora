@@ -20,7 +20,10 @@ app.config["IMAGE_UPLOADS"] = "./static/images/"
 app.config["ALLOWED_IMAGE_EXTENSIONS"] = ['.png', '.jpg', '.jpeg']
 ALLOWED_EXTENSIONS = set(['.png', '.jpg', '.jpeg'])
 
-mongo_url = "mongodb+srv://darkOwl:wXsAw8goWFZn6w8G@noctora-xvqmy.mongodb.net/test?retryWrites=true&w=majority"
+mongo_url = "mongodb://localhost:27017/"
+
+with open('conf.txt', 'r') as f:
+    mongo_url = f.read().strip()
 
 myclient = pymongo.MongoClient(mongo_url)
 db = myclient["Noctora"]
